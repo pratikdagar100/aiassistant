@@ -1,0 +1,74 @@
+# PratikAI — Python dependencies
+# Target interpreter: Python 3.11 (see scripts/setup.ps1)
+#
+# This file grows phase by phase. Phase 1 only pulls in what the
+# backend foundation (API, config, logging, database) needs.
+
+# --- Phase 1: Foundation -----------------------------------------------
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+SQLAlchemy==2.0.36
+alembic==1.14.0
+python-dotenv==1.0.1
+websockets==14.1
+httpx==0.28.1
+
+# --- Phase 4: Memory (semantic retrieval) --------------------------------
+# torch is CPU-only here (installed separately from the PyTorch CPU index in
+# setup.ps1) so the embedding model never competes with the LLM for VRAM —
+# RTX 3060's 12GB is tight enough already once vision/avatar phases land.
+sentence-transformers==3.3.1
+chromadb==0.5.23
+
+# --- Knowledge base (document RAG): PDF/DOCX text extraction -------------
+pypdf==5.1.0
+python-docx==1.1.2
+
+# --- Phase 5: Speech (STT / language detection / TTS) --------------------
+# faster-whisper runs on CPU by default here too (see app/speech/stt.py) —
+# same VRAM-budget reasoning as the embedding model in Phase 4.
+#
+# TTS uses the standalone Piper binary (app/speech/tts.py downloads it),
+# NOT the piper-tts PyPI package — piper-tts depends on piper-phonemize,
+# which has no published Windows wheel, so pip install fails on this platform.
+faster-whisper==1.1.1
+python-multipart==0.0.20
+
+# --- Phase 6: Computer tools (mouse/keyboard/clipboard/windows) ----------
+pyautogui==0.9.54
+pyperclip==1.9.0
+pygetwindow==0.0.9
+pywin32==308
+
+# --- Phase 7: Windows UI Automation + browser control --------------------
+pywinauto==0.6.9
+playwright==1.49.1
+
+# --- Phase 9: Vision (screenshot / OCR) -----------------------------------
+# Tesseract binary itself is a separate system install (see docs/vision.md
+# and scripts/setup.ps1) — pytesseract just shells out to it.
+pytesseract==0.3.13
+
+# --- Phase 12: LoRA/QLoRA training (OPTIONAL, NOT installed by default) --
+# Multi-GB packages + a separate multi-GB HF-format base model download.
+# app/learning/lora_trainer.py works fully in dry-run mode without these;
+# install only if you intend to actually run a training job:
+#   pip install peft transformers bitsandbytes accelerate datasets
+# (left commented out intentionally — see docs/learning.md)
+# peft
+# transformers
+# bitsandbytes
+# accelerate
+# datasets
+
+# --- Dev / testing -------------------------------------------------------
+pytest==8.3.4
+pytest-asyncio==0.24.0
+
+# --- Phase 2+: added as later phases are implemented --------------------
+# ollama, faster-whisper, chromadb, sentence-transformers, pywinauto,
+# opencv-python, playwright, pyautogui, etc. are added in their own phases
+# so `pip install -r requirements.txt` never pulls in more than what the
+# current phase actually uses and can verify.

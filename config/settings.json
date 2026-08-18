@@ -1,0 +1,70 @@
+{
+  "app_name": "PratikAI",
+  "version": "0.1.0",
+  "phase": 13,
+
+  "backend": {
+    "host": "127.0.0.1",
+    "port": 8756
+  },
+
+  "frontend": {
+    "host": "127.0.0.1",
+    "port": 5173
+  },
+
+  "database": {
+    "path": "data/database/pratikai.db"
+  },
+
+  "logging": {
+    "level": "INFO",
+    "dir": "data/logs",
+    "max_bytes": 5242880,
+    "backup_count": 5
+  },
+
+  "llm": {
+    "provider": "ollama",
+    "default_model": "qwen3:8b",
+    "ollama_host": "http://127.0.0.1:11434"
+  },
+
+  "memory": {
+    "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+    "embedding_device": "cpu",
+    "chroma_path": "data/embeddings/chroma",
+    "retrieval_top_k": 5
+  },
+
+  "speech": {
+    "stt_mode": "local",
+    "whisper_model_size": "small",
+    "whisper_device": "cpu",
+    "whisper_compute_type": "int8",
+    "piper_binary_path": "models/piper/piper/piper.exe",
+    "piper_voices_dir": "models/piper/voices",
+    "default_voice": "en_US-lessac-medium"
+  },
+
+  "vision": {
+    "tesseract_path": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
+    "vision_model": "moondream"
+  },
+
+  "default_entity": "friday",
+
+  "google_cloud": {
+    "stt_enabled": false,
+    "translation_enabled": false,
+    "note": "Credentials are never stored here. Set GOOGLE_APPLICATION_CREDENTIALS or the PRATIKAI_GOOGLE_* env vars instead. See docs/speech.md."
+  },
+
+  "startup": {
+    "enabled": false,
+    "auto_select_entity": true,
+    "auto_mic": false,
+    "wake_word": false,
+    "auto_avatar": false
+  }
+}
